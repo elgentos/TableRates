@@ -1,0 +1,44 @@
+body {
+	background: #F0F0F0 url(/img/tile.gif) repeat -70% 0;
+	color: #474747;
+	font-size: 13px;
+	line-height: 1.6em;
+	font-family: "Lucida Grande", Verdana, "Bitstream Vera Sans", Arial,
+		sans-serif;
+		margin:20px;
+}
+
+h2 {
+	margin-left: 10px;
+}
+
+::-moz-selection {
+	background: #F03F38;
+	color: #fff;
+	text-shadow: none;
+}
+
+th { text-align:left; }
+
+::selection {
+	background: #F03F38;
+	color: #fff;
+	text-shadow: none;
+}
+ul { list-style-type:none; margin:0;padding:0; }
+
+.small {
+	font-size: 11px;
+}
+
+.example {
+	color: black;
+}
+
+p { margin-left:10px; }
+
+a
+{
+	color:#000;
+	text-decoration:none;
+}
