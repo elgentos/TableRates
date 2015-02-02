@@ -1,8 +1,8 @@
 function checkEU() {
     if(document.location.href.indexOf("twoLetterCodes")>0) {
-        var EU = new Array("BE","BG","CY","DK","DE","EE","FI","FR","GR","HU","IR","IT","LV","LT","LU","MT","NL","AT","PL","PT","RO","SK","SI","ES","CZ","GB","SE");
+        var EU = new Array("BE","BG","CY","DK","DE","EE","FI","FR","GR","HU","IE","IT","LV","LT","LU","MT","NL","AT","PL","PT","RO","SK","SI","ES","CZ","GB","SE");
     } else {
-        var EU = new Array("BEL","BGR","CYP","DNK","DEU","EST","FIN","FRA","GRC","HUN","IRN","ITA","LVA","LTU","LUX","MLT","NLD","AUT","POL","PRT","ROU","SVK","SVN","ESP","CZE","GBR","SWE");
+        var EU = new Array("BEL","BGR","CYP","DNK","DEU","EST","FIN","FRA","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","AUT","POL","PRT","ROU","SVK","SVN","ESP","CZE","GBR","SWE");
     }
     for(i=0;i<EU.length;i++) {
         $("input[value='"+EU[i]+"']").attr('checked','checked');
