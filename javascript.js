@@ -1,8 +1,14 @@
 function checkEU() {
     if(document.location.href.indexOf("twoLetterCodes")>0) {
+<<<<<<< HEAD
         var EU = new Array("BE","BG","CY","DK","DE","EE","FI","FR","GR","HU","HR","IE","IT","LV","LT","LU","MT","NL","AT","PL","PT","RO","SK","SI","ES","CZ","GB","SE");
     } else {
         var EU = new Array("BEL","BGR","CYP","DNK","DEU","EST","FIN","FRA","GRC","HUN","HRV","IRL","ITA","LVA","LTU","LUX","MLT","NLD","AUT","POL","PRT","ROU","SVK","SVN","ESP","CZE","GBR","SWE");
+=======
+        var EU = new Array("BE","BG","CY","DK","DE","EE","FI","FR","GR","HU","IE","IT","LV","LT","LU","MT","NL","AT","PL","PT","RO","SK","SI","ES","CZ","GB","SE");
+    } else {
+        var EU = new Array("BEL","BGR","CYP","DNK","DEU","EST","FIN","FRA","GRC","HUN","IRL","ITA","LVA","LTU","LUX","MLT","NLD","AUT","POL","PRT","ROU","SVK","SVN","ESP","CZE","GBR","SWE");
+>>>>>>> b5591b8c282c244e1dcc54426cea390d58a839b5
     }
     for(i=0;i<EU.length;i++) {
         $("input[value='"+EU[i]+"']").attr('checked','checked');
