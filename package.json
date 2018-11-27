@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "convert-array-to-csv": "^1.0.4",
     "react": "^16.6.3",
+    "react-csv": "^1.0.19",
     "react-dom": "^16.6.3",
+    "react-ga": "^2.5.5",
     "react-scripts": "2.1.1"
   },
   "scripts": {
