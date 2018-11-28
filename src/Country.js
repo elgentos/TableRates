@@ -1,18 +1,17 @@
 import React from 'react'
 
 export default class Country extends React.Component {
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
 
-        this.state = {isChecked:false}
+        this.state = {isChecked: false}
 
         this.check = this.check.bind(this)
         this.uncheck = this.uncheck.bind(this)
     }
 
     onChangeField = e => {
-        this.setState({isChecked: !this.state.checked}, this.updateCsvData)
+        this.setState({isChecked: !this.state.isChecked}, this.updateCsvData)
     }
 
     updateCsvData = e => {

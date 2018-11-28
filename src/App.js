@@ -1,68 +1,80 @@
-import React, { Component } from 'react';
-import ReactGA from 'react-ga';
-import './App.css';
+import React, {Component} from 'react'
+import ReactGA from 'react-ga'
+import './App.css'
 import Preview from './Preview'
 import Actions from './Actions'
 import Country from './Country'
-import { CSVLink } from "react-csv";
+import {CSVLink} from 'react-csv'
 import {isoCountries} from './isoCountries'
 
 class App extends Component {
-  constructor() {
-    super()
+    constructor(props) {
+        super(props)
 
-    this.state = {
-      csvData: []
+        this.state = {
+            csvData: []
+        }
+
+        ReactGA.initialize('UA-1292775-30')
+        ReactGA.pageview(window.location.pathname + window.location.search)
     }
 
-    ReactGA.initialize('UA-1292775-30');
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  }
+    updateCsvDataWithCountryData = (countryCode, countryData) => {
+        let csvData = Object.assign([], this.state.csvData);
+        console.log(csvData)
 
-  updateCsvDataWithCountryData = (countryCode, countryData) => {
-    let csvData = this.state.csvData;
+        csvData = csvData.filter(function (country) {
+            return country.Country !== countryCode
+        })
+        if (countryData) {
+            csvData.push(countryData)
+        }
 
-    //csvData = csvData.filter(function (country){ return country.Country !== countryCode })
-    if (countryData) {
-        csvData.push(countryData)
+        this.setState({csvData: csvData})
     }
-
-    this.setState({csvData: csvData})
-  }
 
     checkCountry = (country) => {
         this.refs['country-' + country.iso3_code].check()
     }
 
-  render() {
-    return (
-      <div className="tableratesgenerator">
-        <header>
-            <h1>Table Rates Generator</h1>
-        </header>
-        <Actions checkCountry={this.checkCountry} />
-          <div className="main">
-            <Preview data={this.state.csvData}/>
-        <section className="generator">
-            <h2>Settings</h2>
-          <table>
-            <thead>
-                <tr key={'header'}><td></td><td>Country</td><td>From subtotal</td><td>Shipping Costs</td><td></td></tr>
-            </thead>
-            <tbody>
-            {isoCountries.map((country) => {
-                return (<Country ref={'country-' + country.iso3_code} {...country} key={country.iso3_code} updateCsvDataWithCountryData={this.updateCsvDataWithCountryData} />)
-            })}
-            </tbody>
-          </table>
-          <CSVLink data={this.state.csvData} filename={"tablerates.csv"} className="btn btn-primary" target="_blank" onClick={this.gatherData}>
-              Generate tablerates.csv
-          </CSVLink>
-        </section>
-          </div>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="tableratesgenerator">
+                <header>
+                    <h1>Table Rates Generator</h1>
+                </header>
+                <Actions checkCountry={this.checkCountry}/>
+                <div className="main">
+                    <Preview data={this.state.csvData}/>
+                    <section className="generator">
+                        <h2>Settings</h2>
+                        <table>
+                            <thead>
+                            <tr key={'header'}>
+                                <td></td>
+                                <td>Country</td>
+                                <td>From subtotal</td>
+                                <td>Shipping Costs</td>
+                                <td></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {isoCountries.map((country) => {
+                                return (
+                                    <Country ref={'country-' + country.iso3_code} {...country} key={country.iso3_code}
+                                             updateCsvDataWithCountryData={this.updateCsvDataWithCountryData}/>)
+                            })}
+                            </tbody>
+                        </table>
+                        <CSVLink data={this.state.csvData} filename={"tablerates.csv"} className="btn btn-primary"
+                                 target="_blank" onClick={this.gatherData}>
+                            Generate tablerates.csv
+                        </CSVLink>
+                    </section>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default App;
