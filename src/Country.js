@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 export default class Country extends React.Component {
     constructor(props)
     {
@@ -12,24 +13,28 @@ export default class Country extends React.Component {
     }
 
     onChangeField = e => {
-        this.setState({isChecked: !this.state.isChecked}, this.updateCsvData)
-    }
-
-    updateCsvData = e => {
-        let countryCode = this.props.iso3_code;
-        let countryData = false;
-
-        if (this.state.isChecked) {
-            countryData = {
-                'Country': countryCode,
-                'Region/State': '*',
-                'Zip/Postal Code': '*',
-                'Order Subtotal (and above)': this.refs.from.value,
-                'Shipping Price': this.refs.shippingCosts.value
+        let inputType = e.target.type
+        if (inputType === "checkbox"){
+            this.setState({isChecked: !this.state.isChecked}, this.updateCsvData(inputType))
+        } else {
+            if(this.state.isChecked) {
+                this.setState(this.updateCsvData(inputType))
             }
         }
+    };
 
-        this.props.updateCsvDataWithCountryData(countryCode, countryData);
+    updateCsvData = (type, e) => {
+        let countryCode = this.props.iso3_code;
+
+        let countryData = {
+            'Country': countryCode,
+            'Region/State': '*',
+            'Zip/Postal Code': '*',
+            'Order Subtotal (and above)': this.refs.from.value,
+            'Shipping Price': this.refs.shippingCosts.value
+        }
+
+        this.props.updateCsvDataWithCountryData(countryCode, countryData, type);
     }
 
     check = e => {

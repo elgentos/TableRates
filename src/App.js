@@ -19,30 +19,42 @@ class App extends Component {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }
 
-    updateCsvDataWithCountryData = (countryCode, countryData) => {
-        // Check if country is already in csvData
-        let countryInCsvData = this.state.csvData.filter(function (country) {
+    isCountryInData = countryCode => (
+        this.state.csvData.filter(function (country) {
             return country.Country === countryCode
-        }).length > 0;
+        }).length > 0);
 
-        if (!countryInCsvData) { // We want to add the country
+    updateCsvDataWithCountryData = (countryCode, countryData, inputType) => {
+        // Check if country is already in csvData
+        let countryInCsvData = this.isCountryInData(countryCode)
+
+        if (!countryInCsvData) { // If not, add the country
             this.setState(prevState => ({
                     csvData: [...prevState.csvData, countryData]
                 })
             )
-        } else { // We want to delete the country
-            this.setState(prevState => ({
-                    csvData: prevState.csvData.filter(function (country) {
-                        return country.Country !== countryCode
+        } else { // If country already in csvData
+            if (inputType === 'checkbox') { // We want to delete the country if unchecked
+                this.setState(prevState => ({
+                        csvData: prevState.csvData.filter(function (country) {
+                            return country.Country !== countryCode
+                        })
                     })
-                })
-            )
+                )
+            } else if (inputType === 'text') { // Or update the countryData if textfield changed
+                this.setState(prevState => ({
+                        csvData: [...prevState.csvData.filter(function (country) {
+                            return country.Country !== countryCode
+                        }), countryData]
+                    })
+                )
+            }
         }
     };
 
   checkCountry = (country) => {
       this.refs['country-' + country.iso3_code].check()
-  }
+  };
 
   render() {
     return (
