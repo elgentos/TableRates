@@ -19,20 +19,25 @@ class App extends Component {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }
 
-  updateCsvDataWithCountryData = (countryCode, countryData) => {
-    let csvData = this.state.csvData;
+    updateCsvDataWithCountryData = (countryCode, countryData) => {
+        if (countryData) { // If we want to add a country
+            this.setState(prevState => ({
+                    csvData: [...prevState.csvData, countryData]
+                })
+            )
+        } else { // If we want to delete a country
+            this.setState(prevState => ({
+                    csvData: prevState.csvData.filter(function (country) {
+                        return country.Country !== countryCode
+                    })
+                })
+            )
+        }
+    };
 
-    //csvData = csvData.filter(function (country){ return country.Country !== countryCode })
-    if (countryData) {
-        csvData.push(countryData)
-    }
-
-    this.setState({csvData: csvData})
+  checkCountry = (country) => {
+      this.refs['country-' + country.iso3_code].check()
   }
-
-    checkCountry = (country) => {
-        this.refs['country-' + country.iso3_code].check()
-    }
 
   render() {
     return (

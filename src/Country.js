@@ -12,7 +12,7 @@ export default class Country extends React.Component {
     }
 
     onChangeField = e => {
-        this.setState({isChecked: !this.state.checked}, this.updateCsvData)
+        this.setState({isChecked: !this.state.isChecked}, this.updateCsvData)
     }
 
     updateCsvData = e => {
