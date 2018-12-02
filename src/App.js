@@ -20,12 +20,17 @@ class App extends Component {
   }
 
     updateCsvDataWithCountryData = (countryCode, countryData) => {
-        if (countryData) { // If we want to add a country
+        // Check if country is already in csvData
+        let countryInCsvData = this.state.csvData.filter(function (country) {
+            return country.Country === countryCode
+        }).length > 0;
+
+        if (!countryInCsvData) { // We want to add the country
             this.setState(prevState => ({
                     csvData: [...prevState.csvData, countryData]
                 })
             )
-        } else { // If we want to delete a country
+        } else { // We want to delete the country
             this.setState(prevState => ({
                     csvData: prevState.csvData.filter(function (country) {
                         return country.Country !== countryCode
