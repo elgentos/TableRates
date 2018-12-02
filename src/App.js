@@ -19,20 +19,42 @@ class App extends Component {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }
 
-  updateCsvDataWithCountryData = (countryCode, countryData) => {
-    let csvData = this.state.csvData;
+    isCountryInData = countryCode => (
+        this.state.csvData.filter(function (country) {
+            return country.Country === countryCode
+        }).length > 0);
 
-    //csvData = csvData.filter(function (country){ return country.Country !== countryCode })
-    if (countryData) {
-        csvData.push(countryData)
-    }
+    updateCsvDataWithCountryData = (countryCode, countryData, inputType) => {
+        // Check if country is already in csvData
+        let countryInCsvData = this.isCountryInData(countryCode)
 
-    this.setState({csvData: csvData})
-  }
+        if (!countryInCsvData) { // If not, add the country
+            this.setState(prevState => ({
+                    csvData: [...prevState.csvData, countryData]
+                })
+            )
+        } else { // If country already in csvData
+            if (inputType === 'checkbox') { // We want to delete the country if unchecked
+                this.setState(prevState => ({
+                        csvData: prevState.csvData.filter(function (country) {
+                            return country.Country !== countryCode
+                        })
+                    })
+                )
+            } else if (inputType === 'text') { // Or update the countryData if textfield changed
+                this.setState(prevState => ({
+                        csvData: [...prevState.csvData.filter(function (country) {
+                            return country.Country !== countryCode
+                        }), countryData]
+                    })
+                )
+            }
+        }
+    };
 
-    checkCountry = (country) => {
-        this.refs['country-' + country.iso3_code].check()
-    }
+  checkCountry = (country) => {
+      this.refs['country-' + country.iso3_code].check()
+  };
 
   render() {
     return (
