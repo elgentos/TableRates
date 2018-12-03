@@ -12,7 +12,8 @@ class App extends Component {
         super(props)
 
         this.state = {
-            csvData: []
+            csvData: [],
+            condition: 'subtotal'
         }
 
         ReactGA.initialize('UA-1292775-30')
@@ -62,13 +63,38 @@ class App extends Component {
         }, this);
     }
 
+    setShippingCostsForSelectedCountries = shippingCosts => {
+        this.state.csvData.forEach(function (country) {
+            this.refs['country-' + country.Country].setShippingCosts(shippingCosts)
+        }, this);
+    }
+
+    setFromForSelectedCountries = from => {
+        this.state.csvData.forEach(function (country) {
+            this.refs['country-' + country.Country].setFrom(from)
+        }, this);
+    }
+
+    setCondition = condition => {
+        this.setState({condition: condition})
+        isoCountries.forEach(function (country) {
+            this.refs['country-' + country.iso3_code].setCondition(condition)
+        }, this);
+    }
+
     render() {
         return (
             <div className="tableratesgenerator">
                 <header>
                     <h1>Table Rates Generator</h1>
                 </header>
-                <Actions checkCountry={this.checkCountry} clearValuesForSelectedCountries={this.clearValuesForSelectedCountries}/>
+                <Actions
+                    checkCountry={this.checkCountry}
+                    clearValuesForSelectedCountries={this.clearValuesForSelectedCountries}
+                    setShippingCostsForSelectedCountries={this.setShippingCostsForSelectedCountries}
+                    setFromForSelectedCountries={this.setFromForSelectedCountries}
+                    setCondition={this.setCondition}
+                />
                 <div className="main">
                     <Preview data={this.state.csvData}/>
                     <section className="generator">
@@ -78,7 +104,7 @@ class App extends Component {
                             <tr key={'header'}>
                                 <td></td>
                                 <td>Country</td>
-                                <td>From subtotal</td>
+                                <td>From {this.state.condition}</td>
                                 <td>Shipping Costs</td>
                                 <td></td>
                             </tr>
@@ -86,7 +112,7 @@ class App extends Component {
                             <tbody>
                             {isoCountries.map((country) => {
                                 return (
-                                    <Country ref={'country-' + country.iso3_code} {...country} key={country.iso3_code}
+                                    <Country ref={'country-' + country.iso3_code} {...country} condition={this.state.condition} key={country.iso3_code}
                                              updateCsvDataWithCountryData={this.updateCsvDataWithCountryData}/>)
                             })}
                             </tbody>

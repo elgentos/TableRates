@@ -3,15 +3,33 @@ import {isoCountries} from './isoCountries'
 
 export default class Actions extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {defaultShippingCosts: 12.50, defaultFrom: 0, condition: 'subtotal'};
+    }
+
     checkCountries = (field, bool) => {
         const countries = isoCountries.filter(function(country) {
             return country[field] === bool;
         })
 
         countries.forEach(function (country) {
-            console.log(country.iso3_code)
             this.props.checkCountry(country)
         }, this);
+    }
+
+    setDefaultShippingCosts = e => {
+        this.setState({defaultShippingCosts: e.target.value});
+    }
+
+    setDefaultFrom = e => {
+        this.setState({defaultFrom: e.target.value});
+    }
+
+    setCondition = e => {
+        this.setState({condition: e.target.value});
+        this.props.setCondition(e.target.value);
     }
 
     render() {
@@ -23,23 +41,21 @@ export default class Actions extends React.Component {
                 <input type={'button'} value={'Check all non-European countries'} onClick={() => this.checkCountries('europe', false)}/><br/><br/>
 
                 {/*<input type={'button'} value={'Add empty row to selected countries'}/><br/>*/}
-                {/*<input type={'button'} value={'Reset checks'}/><br/>*/}
                 <input type={'button'} value={'Clear values for selected countries'} onClick={() => this.props.clearValuesForSelectedCountries()} />
-                {/*<br/>*/}
-                {/*<br/>*/}
-                {/*Default price: <input type="text" value="12.50" id="defPrice" name="defPrice"/> <input type={'button'}*/}
-                                                                                                       {/*value={'Set default Shipping Costs for checked countries'}/>*/}
-                {/*<br/>*/}
+                <br/>
+                <br/>
+                Default From condition value: <input type="text" defaultValue={this.state.defaultFrom} onChange={this.setDefaultFrom}/>
+                <input type={'button'} value={'Set for checked countries'} onClick={() => this.props.setFromForSelectedCountries(this.state.defaultFrom)}/>
+                <br/>
+                Default shipping costs: <input type="text" defaultValue={this.state.defaultShippingCosts} onChange={this.setDefaultShippingCosts} />
+                <input type={'button'} value={'Set for checked countries'} onClick={() => this.props.setShippingCostsForSelectedCountries(this.state.defaultShippingCosts)}/>
+                <br/>
                 Table rates condition:
-                <select defaultValue={'price'}>
-                    <option value="price">Price vs. Destination</option>
-                    {/*<option value="weight">Weight vs. Destination</option>*/}
-                    {/*<option value="qty"># of Items vs. Destination</option>*/}
+                <select defaultValue={this.state.condition} onChange={this.setCondition}>
+                    <option value="subtotal">Destination vs. Price</option>
+                    <option value="weight">Destination vs. Weight</option>
+                    <option value="quantity">Destination vs. # of Items</option>
                 </select>
-                {/*<br/>*/}
-                {/*Default From condition value: <input type="text" value="0" id="defSubtotal" name="defSubtotal"/><input*/}
-                {/*type="button" name="button" onClick="setdefSubtotal()"*/}
-                {/*value="Set default condition value for checked countries"/>*/}
             </section>
         )
     }

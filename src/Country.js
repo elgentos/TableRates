@@ -5,7 +5,7 @@ export default class Country extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {isChecked: false, from: '', shippingCosts: ''}
+        this.state = {isChecked: false, from: '', shippingCosts: '', condition: props.condition}
     }
 
     onChangeField = e => {
@@ -25,6 +25,18 @@ export default class Country extends React.Component {
         }
     };
 
+    setShippingCosts = shippingCosts => {
+        this.setState({shippingCosts: shippingCosts}, () => { this.updateCsvData('text') })
+    };
+
+    setFrom = from => {
+        this.setState({from: from}, () => { this.updateCsvData('text') })
+    };
+
+    setCondition = condition => {
+        this.setState({condition: condition})
+    };
+
     updateCsvData = (type, e) => {
         let countryCode = this.props.iso3_code;
 
@@ -32,8 +44,8 @@ export default class Country extends React.Component {
             'Country': countryCode,
             'Region/State': '*',
             'Zip/Postal Code': '*',
-            'Order Subtotal (and above)': this.state.from,
-            'Shipping Price': this.state.shippingCosts
+            'Condition': this.state.from + '', // cast to string for zero
+            'Shipping Price': this.state.shippingCosts + '' // cast to string for zero
         }
 
         this.props.updateCsvDataWithCountryData(countryCode, countryData, type);
@@ -48,7 +60,13 @@ export default class Country extends React.Component {
     }
 
     clear = e => {
-        this.setState({shippingCosts: '', from: ''}, () => { this.updateCsvData('text', e) })
+        this.setState({shippingCosts: '', from: ''}, () => { this.updateCsvData('text') })
+    }
+
+    addRow = e => {
+        return React.createElement(this.class, {
+            ...this.props
+        })
     }
 
     render() {
@@ -59,7 +77,7 @@ export default class Country extends React.Component {
                        checked={this.state.isChecked}
                        onChange={this.onChangeField}/></td>
             <td>{this.props.name}</td>
-            <td>&euro; <input type={'text'}
+            <td>{this.state.condition === 'subtotal' && '€ '}<input type={'text'}
                               name={'from'}
                               value={this.state.from}
                               onChange={this.onChangeField}/></td>
@@ -67,7 +85,7 @@ export default class Country extends React.Component {
                               name={'shippingCosts'}
                               value={this.state.shippingCosts}
                               onChange={this.onChangeField}/></td>
-            {/*<td><input type={'button'} value={'+ Add row'}/></td>*/}
+            {/*<td><input type={'button'} value={'+ Add row'} onClick={this.addRow}/></td>*/}
         </tr>)
     }
 }
