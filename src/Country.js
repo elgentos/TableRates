@@ -5,19 +5,22 @@ export default class Country extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {isChecked: false}
-
-        this.check = this.check.bind(this)
-        this.uncheck = this.uncheck.bind(this)
+        this.state = {isChecked: false, from: '', shippingCosts: ''}
     }
 
     onChangeField = e => {
         let inputType = e.target.type
+
         if (inputType === "checkbox"){
-            this.setState({isChecked: !this.state.isChecked}, this.updateCsvData(inputType))
+            this.setState({isChecked: !this.state.isChecked}, () => { this.updateCsvData(inputType) })
         } else {
             if(this.state.isChecked) {
-                this.setState(this.updateCsvData(inputType))
+                if (e.target.name === 'shippingCosts') {
+                    this.setState({shippingCosts: e.target.value}, () => { this.updateCsvData(inputType) })
+                }
+                if (e.target.name === 'from') {
+                    this.setState({from: e.target.value}, () => { this.updateCsvData(inputType) })
+                }
             }
         }
     };
@@ -29,8 +32,8 @@ export default class Country extends React.Component {
             'Country': countryCode,
             'Region/State': '*',
             'Zip/Postal Code': '*',
-            'Order Subtotal (and above)': this.refs.from.value,
-            'Shipping Price': this.refs.shippingCosts.value
+            'Order Subtotal (and above)': this.state.from,
+            'Shipping Price': this.state.shippingCosts
         }
 
         this.props.updateCsvDataWithCountryData(countryCode, countryData, type);
@@ -44,6 +47,10 @@ export default class Country extends React.Component {
         this.setState({isChecked: false}, this.updateCsvData)
     }
 
+    clear = e => {
+        this.setState({shippingCosts: '', from: ''}, () => { this.updateCsvData('text', e) })
+    }
+
     render() {
         return (<tr key={this.props.iso3_code}>
             <td><input type={'checkbox'}
@@ -53,12 +60,12 @@ export default class Country extends React.Component {
                        onChange={this.onChangeField}/></td>
             <td>{this.props.name}</td>
             <td>&euro; <input type={'text'}
-                              name={'from-' + this.props.iso3_code}
-                              ref={'from'}
+                              name={'from'}
+                              value={this.state.from}
                               onChange={this.onChangeField}/></td>
             <td>&euro; <input type={'text'}
-                              name={'shipping-costs-' + this.props.iso3_code}
-                              ref={'shippingCosts'}
+                              name={'shippingCosts'}
+                              value={this.state.shippingCosts}
                               onChange={this.onChangeField}/></td>
             {/*<td><input type={'button'} value={'+ Add row'}/></td>*/}
         </tr>)

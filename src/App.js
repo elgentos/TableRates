@@ -56,13 +56,19 @@ class App extends Component {
         this.refs['country-' + country.iso3_code].check()
     };
 
+    clearValuesForSelectedCountries = () => {
+        this.state.csvData.forEach(function (country) {
+            this.refs['country-' + country.Country].clear()
+        }, this);
+    }
+
     render() {
         return (
             <div className="tableratesgenerator">
                 <header>
                     <h1>Table Rates Generator</h1>
                 </header>
-                <Actions checkCountry={this.checkCountry}/>
+                <Actions checkCountry={this.checkCountry} clearValuesForSelectedCountries={this.clearValuesForSelectedCountries}/>
                 <div className="main">
                     <Preview data={this.state.csvData}/>
                     <section className="generator">
