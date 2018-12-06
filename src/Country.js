@@ -45,10 +45,11 @@ export default class Country extends React.Component {
             'Region/State': '*',
             'Zip/Postal Code': '*',
             'Condition': this.state.from + '', // cast to string for zero
-            'Shipping Price': this.state.shippingCosts + '' // cast to string for zero
+            'Shipping Price': this.state.shippingCosts + '', // cast to string for zero
+            key: this.props.id
         }
 
-        this.props.updateCsvDataWithCountryData(countryCode, countryData, type);
+        this.props.updateCsvDataWithCountryData(countryData, type);
     }
 
     check = e => {
@@ -70,7 +71,7 @@ export default class Country extends React.Component {
     }
 
     render() {
-        return (<tr key={this.props.iso3_code}>
+        return (<tr key={this.props.id}>
             <td><input type={'checkbox'}
                        name={'country-' + this.props.iso3_code}
                        ref={'country'}
@@ -85,7 +86,7 @@ export default class Country extends React.Component {
                               name={'shippingCosts'}
                               value={this.state.shippingCosts}
                               onChange={this.onChangeField}/></td>
-            {/*<td><input type={'button'} value={'+ Add row'} onClick={this.addRow}/></td>*/}
+            <td><input type={'button'} value={'+ Add row'} onClick={() => this.props.addToCountryList(this) }/></td>
         </tr>)
     }
 }
